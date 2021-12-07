@@ -122,3 +122,39 @@ INSERT INTO order_items VALUES (17, 9, 6, 4, 2);
 INSERT INTO order_items VALUES (18, 10, 6, 2, 1);
 INSERT INTO order_items VALUES (19, 10, 4, 1, 5);
 
+
+select name, address from customers where country='United States';
+
+select * from customers order by name asc;
+
+select * from products where product_name like '%socks%';
+
+select prod_id, product_name, supp_id, unit_price 
+  from product_availability 
+	inner join products  on prod_id  = id 
+	where unit_price  > 100;
+
+select * from product_availability pa 
+	order by unit_price desc
+	limit 5;
+
+select p.product_name, pa.unit_price, s.supplier_name  from products p
+	inner join product_availability pa on pa.prod_id = p.id
+	inner join suppliers s on s.id = pa.supp_id;
+
+select p.product_name, s.supplier_name
+	from products p
+	inner join product_availability pa on pa.prod_id = p.id
+	inner join suppliers s on s.id = pa.supp_id
+	where s.country = 'United Kingdom';
+
+select oi.order_id, o.order_reference, o.order_date, pa.unit_price * oi.quantity as total_cost from order_items oi
+	left join product_availability pa on oi.product_id = pa.prod_id
+	right join orders o on oi.order_id = o.id
+	where o.customer_id = 1;
+
+select o.id, o.order_reference, o.order_date, oi.product_id from orders o 
+	inner join order_items oi on oi.order_id = o.id
+	inner join customers c on c.id = o.customer_id 
+	where c.name = 'Hope Crosby';
+
